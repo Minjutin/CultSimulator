@@ -87,7 +87,7 @@ namespace Activities {
             cout << member->GetName() + " is doing nothing.\n";
             break;
         case 2:
-            cout << member->GetName() + " uses psychiatrist.\n";
+            cout << member->GetName() + " uses psychiatrist.";
             valueMethod(0, -3, member);
             break;
         }
@@ -182,15 +182,13 @@ void DayCycleActivities() {
     for (auto& member : memberList) {
   
         //APULUVUN SAAMINEN FAITHIN MUKAAN!
-        Faith 20-100
-        50/50
+        int apuluku1 = 100 - member->GetFaith();
+        int apuluku2 = rand() % apuluku1;
+        apuluku2 = 100 - apuluku2;
 
-        //Randomize which kind of activity the member does.
-        int apuluku = rand() % 100;
-
-        if (apuluku < 33)
+        if (apuluku2 < 33)
             Activities::BadActivity(member);
-        else if (apuluku < 66)
+        else if (apuluku2 < 66)
             Activities::NeutralActivity(member);
         else
             Activities::GoodActivity(member);
