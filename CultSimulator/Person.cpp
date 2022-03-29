@@ -13,10 +13,19 @@ Person::~Person() {}
 
 //Adders
 void Person::AddFaith(int amount) {
-	_faith += amount;
+	if (_faith+amount>100) 
+		_faith = 100;
+	else
+		_faith += amount;
 }
+
 void Person::AddInsanity(int amount) {
-	_insanity += amount;
+	if (_insanity + amount > 10)
+		_insanity == 10;
+	else if (_insanity + amount < 0)
+		_insanity == 0;
+	else
+		_insanity += amount;
 }
 
 void Person::ChangeRole(string role) {

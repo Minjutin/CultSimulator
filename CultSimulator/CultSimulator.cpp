@@ -28,6 +28,92 @@ void TestCult();
 void DayCycleCheckers();
 void DayCycleActivities();
 
+//namespace for cult activities
+namespace Activities {
+
+    //method for activiting lists.
+    void valueMethod(int faith, int insanity, unique_ptr<Person>& member) {
+
+        //print faith and insanity changes.
+        cout << " (";
+        if (faith > 0)
+            cout << "faith +" << faith << " ";
+        else if (faith < 0)
+            cout << "faith " << faith << " ";
+        if (insanity > 0)
+            cout << "insanity +" << insanity;
+        if (insanity < 0)
+            cout << "insanity " << insanity;
+        cout << ")\n";
+
+        member->AddFaith(faith); member->AddInsanity(insanity);
+    }
+
+    void GoodActivity(unique_ptr<Person>& member) {
+        int which = rand() % 5;
+        switch (which) {
+        case 0:
+            cout << member->GetName() + " is trying to find new followers.";
+            valueMethod(2, 0, member);
+            break;
+        case 1:
+            cout << member->GetName() + " prays for 8 hours.";
+            valueMethod(3, 2, member);
+            break;
+        case 2:
+            cout << member->GetName() + " reads the cult scripture.";
+            valueMethod(1, 1, member);
+            break;
+        case 3:
+            cout << member->GetName() + " makes threatening calls to the previous cult members.";
+            valueMethod(1, 2, member);
+            break;
+        case 4:
+            cout << member->GetName() + " writes a religious opinion to a cooking web site.";
+            valueMethod(1, 1, member);
+            break;
+        }
+
+    }
+
+    void NeutralActivity(unique_ptr<Person>& member) {
+        int which = rand() % 3;
+        switch (which) {
+        case 0:
+            cout << member->GetName() + " has a coffee break.";
+            valueMethod(0, -1, member);
+            break;
+        case 1:
+            cout << member->GetName() + " is doing nothing.\n";
+            break;
+        case 2:
+            cout << member->GetName() + " uses psychiatrist.\n";
+            valueMethod(0, -3, member);
+            break;
+        }
+    }
+
+    void BadActivity(unique_ptr<Person>& member) {
+        int which = rand() % 3;
+        switch (which) {
+        case 0:
+            cout << member->GetName() + " listens propaganda radio.";
+            valueMethod(-2, 0, member);
+            break;
+        case 1:
+            cout << member->GetName() + " finds suspicious letters written by the cult leader.";
+            valueMethod(-2, 1, member);
+            break;
+        case 2:
+            cout << member->GetName() + " attends to enemy cult’s meeting for recearch purpose.";
+            valueMethod(-3, 0, member);
+            break;
+        }
+    }
+
+
+}
+
 int main()
 {
     cout << "CULT SIMULATOR";
@@ -95,32 +181,19 @@ void DayCycleActivities() {
     cout << "\nDaily Activities:\n\n";
     for (auto& member : memberList) {
   
-        //GoodActivity(member);
-        GoodActivity(member);
+        //APULUVUN SAAMINEN FAITHIN MUKAAN!
+        Faith 20-100
+        50/50
 
-        int which = 0;
-        switch (which) {
-        case 0:
-            cout << member->GetName() + " is doing something\n";
-            member->AddFaith(2); member->AddInsanity(3);
-            break;
-        case 1:
+        //Randomize which kind of activity the member does.
+        int apuluku = rand() % 100;
 
-            break;
-        case 2:
-
-            break;
-        case 3:
-
-            break;
-        case 4:
-
-            break;
-        case 5:
-
-            break;
-        }
-
+        if (apuluku < 33)
+            Activities::BadActivity(member);
+        else if (apuluku < 66)
+            Activities::NeutralActivity(member);
+        else
+            Activities::GoodActivity(member);
     }
 }
 
@@ -145,14 +218,14 @@ void CreateCult() {
     string leaderName;
     cin >> leaderName;
 
-    BasicData::AddPerson(memberList, leaderName, 80, 5, "Leader");
+    BasicData::AddPerson(memberList, leaderName, 50, 5, "Leader");
 
     //add other members.
     for (int i = 1; i < howmany; i++) {
         string memberName = "";
         cout << "Add member:\n";
         cin >> memberName;
-        BasicData::AddPerson(memberList, memberName, 30, 0, "New member");
+        BasicData::AddPerson(memberList, memberName, 50, 0, "New member");
     }
     cout << "The cult is now created.\n";
 }
@@ -161,10 +234,10 @@ void CreateCult() {
 void TestCult() {
     cultName = "Erkin kultti";
     godName = "Erkki";
-    BasicData::AddPerson(memberList, "Jaska", 80, 5, "New member");
+    BasicData::AddPerson(memberList, "Jaska", 60, 5, "New member");
     BasicData::AddPerson(memberList, "Sari", 30, 0, "New member");
     BasicData::AddPerson(memberList, "Hilda", 70, 0, "New member");
-    BasicData::AddPerson(memberList, "Masi", 9, 0, "Leader");
+    BasicData::AddPerson(memberList, "Masi", 20, 0, "Leader");
 }
 
 //Prints cult data.
@@ -183,39 +256,4 @@ void GoNext() {
     cout << "CULT SIMULATOR";
 }
 
-//activities lists.
-void GoodActivity(unique_ptr<Person> member) {
-    int which = 0;
-    switch (which) {
-    case 0:
-        cout << member->GetName() + " is doing something\n";
-        member->AddFaith(2); member->AddInsanity(3);
-        break;
-    case 1:
 
-        break;
-    case 2:
-
-        break;
-    case 3:
-
-        break;
-    case 4:
-
-        break;
-    case 5:
-
-        break;
-    }
-
-}
-
-
-void NeutralActivity() {
-
-}
-
-
-void BadActivity() {
-
-}
