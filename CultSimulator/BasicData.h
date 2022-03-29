@@ -16,5 +16,5 @@ namespace BasicData {
 
 	void DeletePerson(Person& person, list <unique_ptr<Person>>& lista);
 
-	void AddActivities(list <unique_ptr<Person>>& lista);
+	//void AddActivities(list <unique_ptr<Person>>& lista);
 }

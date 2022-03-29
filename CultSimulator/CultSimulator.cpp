@@ -6,6 +6,7 @@
 #include <conio.h>
 
 #include "Person.h";
+#include "Activity.h";
 #include "BasicData.h";
 
 using namespace std;
@@ -16,12 +17,15 @@ int power;
 string cultName;
 string godName;
 
-//lists
+//peoplelists
 list <unique_ptr<Person>> memberList;
 list <unique_ptr<Person>> potentialList;
 list <unique_ptr<Person>> enemyList;
 
-
+//activitylists
+list <unique_ptr<Activity>> goodActivities (Activity::Activity());
+list <unique_ptr<Activity>> neutralActivities;
+list <unique_ptr<Activity>> badActivities;
 
 void CreateCult();
 void PrintCult();
@@ -32,6 +36,7 @@ void DayCycleActivities();
 
 int main()
 {
+    cout << "CULT SIMULATOR";
     //Start
     //CreateCult();
     //GoNext();
@@ -53,6 +58,7 @@ int main()
 //These checks if anything must be changed inside the cult.
 void DayCycleCheckers() {
     //check if faith is more than 60.
+    cout << "\n\nRecap:\n";
     for (auto& member : memberList) {
         if (member->GetRole() == "New member" && member->GetFaith() > 59) {
             cout << member->GetName() + " has been promoted to honorary member.\n";
@@ -95,7 +101,7 @@ void DayCycleActivities() {
     cout << "\nDaily Activities:\n\n";
     for (auto& member : memberList) {
   
-        cout << member->GetName() << " is doing nothing.\n";
+        
         
     }
 }
@@ -140,12 +146,12 @@ void TestCult() {
     BasicData::AddPerson(memberList, "Jaska", 80, 5, "New member");
     BasicData::AddPerson(memberList, "Sari", 30, 0, "New member");
     BasicData::AddPerson(memberList, "Hilda", 70, 0, "New member");
-    BasicData::AddPerson(memberList, "Masi", 9, 0, "New member");
+    BasicData::AddPerson(memberList, "Masi", 9, 0, "Leader");
 }
 
 //Prints cult data.
 void PrintCult() {
-    cout << "Cult members:\n\n";
+    cout << "\n\nCult members:\n\n";
     for (auto& member : memberList) {
         cout << member->GetRole() + ": "+ member->GetName() + ", faith " + to_string(member->GetFaith()) + ", insanity " + to_string(member->GetInsanity()) + ". \n";
     }
@@ -156,5 +162,6 @@ void GoNext() {
     cout << "\nWrite C to Continue.\n";
     cin >> empty;
     system("cls");
+    cout << "CULT SIMULATOR";
 }
 

@@ -12,7 +12,7 @@ class Activity {
 
 private:
 	Person& _person1;
-	//Person& _person2;
+	Person& _person2;
 
 	int _faith1;
 	int _insanity1;
@@ -30,6 +30,6 @@ public:
 	~Activity();
 
 	//return member.
-	/*Person& GetMemberFromList(list <unique_ptr<Person>>& lista);*/
+	Person& GetMemberFromList(list <unique_ptr<Person>>& lista);
 
 };
