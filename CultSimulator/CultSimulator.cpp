@@ -6,7 +6,6 @@
 #include <conio.h>
 
 #include "Person.h";
-#include "Activity.h";
 #include "BasicData.h";
 
 using namespace std;
@@ -96,7 +95,7 @@ void DayCycleActivities() {
     cout << "\nDaily Activities:\n\n";
     for (auto& member : memberList) {
   
-        
+        GoodActivity(member);
         
     }
 }
@@ -160,3 +159,43 @@ void GoNext() {
     cout << "CULT SIMULATOR";
 }
 
+
+
+
+
+//activities lists.
+void GoodActivity(unique_ptr < Person> person) {
+    int which = 0;
+    switch (which) {
+    case 0:
+        cout << person->GetName()+" is doing nothing";
+        person->AddFaith(2); person->AddInsanity(3);
+        break;
+    case 1:
+
+        break;
+    case 2:
+
+        break;
+    case 3:
+
+        break;
+    case 4:
+
+        break;
+    case 5:
+
+        break;
+    }
+
+}
+
+
+void NeutralActivity() {
+
+}
+
+
+void BadActivity() {
+
+}
