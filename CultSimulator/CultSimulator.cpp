@@ -55,8 +55,8 @@ void DayCycleCheckers() {
     cout << "\n\nRecap:\n";
     for (auto& member : memberList) {
         if (member->GetRole() == "New member" && member->GetFaith() > 59) {
-            cout << member->GetName() + " has been promoted to honorary member.\n";
-            member->ChangeRole("Honorary member");
+            cout << member->GetName() + " has been promoted to full-time member.\n";
+            member->ChangeRole("Member");
         }
     }
 
@@ -82,7 +82,7 @@ void DayCycleCheckers() {
     //EDIT now it only takes the first member.
     if (noLeader) {
         for (auto& member : memberList) {
-            if (member->GetRole() == "Honorary member") {
+            if (member->GetRole() == "Member") {
                 cout << "Since the previous leader is no longer among us, " + member->GetName() + " is now the new leader.\n";
                 member->ChangeRole("Leader");
                 break;
@@ -95,8 +95,32 @@ void DayCycleActivities() {
     cout << "\nDaily Activities:\n\n";
     for (auto& member : memberList) {
   
+        //GoodActivity(member);
         GoodActivity(member);
-        
+
+        int which = 0;
+        switch (which) {
+        case 0:
+            cout << member->GetName() + " is doing something\n";
+            member->AddFaith(2); member->AddInsanity(3);
+            break;
+        case 1:
+
+            break;
+        case 2:
+
+            break;
+        case 3:
+
+            break;
+        case 4:
+
+            break;
+        case 5:
+
+            break;
+        }
+
     }
 }
 
@@ -159,17 +183,13 @@ void GoNext() {
     cout << "CULT SIMULATOR";
 }
 
-
-
-
-
 //activities lists.
-void GoodActivity(unique_ptr < Person> person) {
+void GoodActivity(unique_ptr<Person> member) {
     int which = 0;
     switch (which) {
     case 0:
-        cout << person->GetName()+" is doing nothing";
-        person->AddFaith(2); person->AddInsanity(3);
+        cout << member->GetName() + " is doing something\n";
+        member->AddFaith(2); member->AddInsanity(3);
         break;
     case 1:
 

@@ -24,24 +24,12 @@
     <ClCompile Include="BasicData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Activity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Activities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Person.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BasicData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Activity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Activities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

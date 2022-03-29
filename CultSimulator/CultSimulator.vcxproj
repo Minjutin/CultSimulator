@@ -139,15 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Activities.cpp" />
-    <ClCompile Include="Activity.cpp" />
     <ClCompile Include="BasicData.cpp" />
     <ClCompile Include="CultSimulator.cpp" />
     <ClCompile Include="Person.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Activities.h" />
-    <ClInclude Include="Activity.h" />
     <ClInclude Include="BasicData.h" />
     <ClInclude Include="Person.h" />
   </ItemGroup>
