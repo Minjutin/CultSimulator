@@ -11,8 +11,6 @@ class Person;
 class Activity {
 
 private:
-	Person& _person1;
-	Person& _person2;
 
 	int _faith1;
 	int _insanity1;
@@ -21,10 +19,10 @@ private:
 
 public:
 	//constructor for activity with one cult member.
-	Activity(Person& person1, int faith1, int insanity1);
+	Activity(int faith1, int insanity1);
 
 	//constructor for activity with two cult members.
-	Activity(Person& person1, int faith1, int insanity1, int faith2, int insanity2, list <unique_ptr<Person>>& lista);
+	Activity(int faith1, int insanity1, int faith2, int insanity2, list <unique_ptr<Person>>& lista);
 
 	//Destructor??
 	~Activity();

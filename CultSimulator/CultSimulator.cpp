@@ -22,11 +22,6 @@ list <unique_ptr<Person>> memberList;
 list <unique_ptr<Person>> potentialList;
 list <unique_ptr<Person>> enemyList;
 
-//activitylists
-list <unique_ptr<Activity>> goodActivities (Activity::Activity());
-list <unique_ptr<Activity>> neutralActivities;
-list <unique_ptr<Activity>> badActivities;
-
 void CreateCult();
 void PrintCult();
 void GoNext();

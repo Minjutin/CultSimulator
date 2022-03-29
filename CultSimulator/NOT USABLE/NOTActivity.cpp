@@ -2,7 +2,7 @@
 #include "Activity.h"
 
 //Constructing one person activity.
-Activity::Activity(Person& person1, int faith1, int insanity1) : _person1(person1), _person2(person1) {
+Activity::Activity(int faith1, int insanity1) {
 	_faith1 = faith1;
 	_insanity1 = insanity1;
 
@@ -10,7 +10,7 @@ Activity::Activity(Person& person1, int faith1, int insanity1) : _person1(person
 }
 
 //Constructing activity for two people.
-Activity::Activity(Person& person1, int faith1, int insanity1, int faith2, int insanity2, list <unique_ptr<Person>>& lista) : _person1(person1), _person2(GetMemberFromList(lista)){
+Activity::Activity(int faith1, int insanity1, int faith2, int insanity2, list <unique_ptr<Person>>& lista) {
 	_faith1 = faith1;
 	_insanity1 = insanity1;
 
