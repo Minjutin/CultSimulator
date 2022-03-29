@@ -21,6 +21,8 @@ list <unique_ptr<Person>> memberList;
 list <unique_ptr<Person>> potentialList;
 list <unique_ptr<Person>> enemyList;
 
+
+
 void CreateCult();
 void PrintCult();
 void GoNext();
