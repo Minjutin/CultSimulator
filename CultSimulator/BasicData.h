@@ -15,4 +15,6 @@ namespace BasicData {
 	void AddPerson(list <unique_ptr<Person>>& lista, string name, int faith, int insanity, string role);
 
 	void DeletePerson(Person& person, list <unique_ptr<Person>>& lista);
+
+	void AddActivities(list <unique_ptr<Person>>& lista);
 }

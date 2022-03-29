@@ -18,4 +18,8 @@ namespace BasicData {
 			}
 		}
 	}
+
+	void AddActivities(list <unique_ptr<Person>>& lista) {
+
+	}
 }
