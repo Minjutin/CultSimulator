@@ -105,7 +105,7 @@ namespace Activities {
             valueMethod(-2, 1, member);
             break;
         case 2:
-            cout << member->GetName() + " attends to enemy cult’s meeting for recearch purpose.";
+            cout << member->GetName() + " attends to enemy cult meeting for recearch purpose.";
             valueMethod(-3, 0, member);
             break;
         }
@@ -117,10 +117,9 @@ namespace Activities {
 int main()
 {
     cout << "CULT SIMULATOR";
-    //Start
-    //CreateCult();
-    //GoNext();
-    TestCult();
+    CreateCult();
+    GoNext();
+ /*   TestCult();*/
     PrintCult();
     GoNext();
 
@@ -179,13 +178,15 @@ void DayCycleCheckers() {
 
 void DayCycleActivities() {
     cout << "\nDaily Activities:\n\n";
+
+    //go through every member and check what they do.
     for (auto& member : memberList) {
   
-        //APULUVUN SAAMINEN FAITHIN MUKAAN!
-        int apuluku1 = 100 - member->GetFaith();
-        int apuluku2 = rand() % apuluku1;
-        apuluku2 = 100 - apuluku2;
+        //Make apuluku based on faith.
+        float apuluku1 = member->GetFaith()-50;
+        float apuluku2 = rand() % 100 + apuluku1;
 
+        //Check what kind of activity happens.
         if (apuluku2 < 33)
             Activities::BadActivity(member);
         else if (apuluku2 < 66)
@@ -200,7 +201,7 @@ void CreateCult() {
     power = 0;
     membercount = 0;
 
-    cout << "Welcome to the Cult Simulator! Tell me the name of your cult:" << endl;
+    cout << "\n\nWelcome to the Cult Simulator! Tell me the name of your cult:" << endl;
     cin >> cultName;
     cout << "\nNext, tell me the name of your god:\n";
     cin >> godName;
@@ -208,7 +209,16 @@ void CreateCult() {
     //how many members
     int howmany = 0;
     cout << "\nTime to add some members. Tell me, how many members will there be (4-10):\n";
-    cin >> howmany;
+
+    //check if user input is cool.
+    while (true) {
+        cin >> howmany;
+        if (howmany < 11 && howmany > 3) {
+            break;
+        }
+        cout << "Invalid input. How many members? (4-10)\n";
+    }
+
     cout << "\nExcellent! Now you can add members by writing their names.\n";
 
     //add leader.
@@ -216,7 +226,7 @@ void CreateCult() {
     string leaderName;
     cin >> leaderName;
 
-    BasicData::AddPerson(memberList, leaderName, 50, 5, "Leader");
+    BasicData::AddPerson(memberList, leaderName, 50, 0, "Leader");
 
     //add other members.
     for (int i = 1; i < howmany; i++) {
