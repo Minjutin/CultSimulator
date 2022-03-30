@@ -20,7 +20,7 @@ void Person::AddFaith(int amount) {
 }
 
 void Person::AddInsanity(int amount) {
-	if (_insanity + amount > 10)
+	if (_insanity + amount > 20)
 		_insanity == 10;
 	else if (_insanity + amount < 0)
 		_insanity == 0;

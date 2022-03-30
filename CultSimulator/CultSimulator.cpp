@@ -30,6 +30,15 @@ namespace BasicMethods {
         for (auto& member : memberList) {
             cout << member->GetRole() + ": " + member->GetName() + ", faith " + to_string(member->GetFaith()) + ", insanity " + to_string(member->GetInsanity()) + ". \n";
         }
+
+        //print potential members list
+        if (!potentialList.empty()) {
+            cout << "\nPotential inviduals:\n\n";
+            for (auto& potential : potentialList) {
+                cout << potential->GetName() + ", faith " + to_string(potential->GetFaith()) + ". \n";
+            }
+        }
+
     }
 
     //Change the screen
@@ -76,7 +85,7 @@ namespace Activities {
     }
 
     void GoodActivity(unique_ptr<Person>& member) {
-        int which = rand() % 5;
+        int which = rand() % 6;
         int apuluku = 0;
         string apustring = "";
         
@@ -87,33 +96,33 @@ namespace Activities {
         case 0:
             apuluku = rand() % 3;
                 if (apuluku < 1) {
-                    cout << "\n" << member->GetName() + " has found a potential member! Give them a name so we can add them to our subscriber-list: ";
-                    valueMethod(3, -1, member);
+                    cout << "\n" << member->GetName() + " has found a potential member! Give them a name so they can be added to the list:";
+                    valueMethod(4, -1, member);
                     cin >> apustring;
-                    BasicData::AddPerson(potentialList, apustring, 10, 0, "Potential member");
+                    BasicData::AddPerson(potentialList, apustring, 10, 0, "Potential");
                     cout << endl;
 
                 }
                 else {
                     cout << member->GetName() + " is trying to find new followers.";
-                    valueMethod(2, 0, member);
+                    valueMethod(3, 0, member);
                 }
             break;
         case 1:
             cout << member->GetName() + " prays for 8 hours.";
-            valueMethod(3, 2, member);
+            valueMethod(5, 2, member);
             break;
         case 2:
             cout << member->GetName() + " reads the cult scripture.";
-            valueMethod(1, 1, member);
+            valueMethod(2, 1, member);
             break;
         case 3:
             cout << member->GetName() + " makes threatening calls to the previous cult members.";
-            valueMethod(2, 2, member);
+            valueMethod(3, 2, member);
             break;
         case 4:
             cout << member->GetName() + " writes a religious opinion to a cooking web site.";
-            valueMethod(1, 1, member);
+            valueMethod(2, 1, member);
             break;
 
         //harassing potential members.
@@ -123,7 +132,10 @@ namespace Activities {
             }
             else {
                 apustring = BasicMethods::GetRandomName(potentialList);
-                cout << member->GetName() + " is persuading " + apustring + " to join " + cultName;
+                cout << member->GetName() + " is persuading " + apustring + " to join " + cultName+".";
+                for (auto& potential : potentialList) {
+                    if (potential->GetName() == apustring) { potential->AddFaith(10); }
+                }
                 valueMethod(2, 1, member);
             }
             break;
@@ -293,9 +305,9 @@ namespace DayCycle {
             float apuluku2 = rand() % 100 + apuluku1;
 
             //Check what kind of activity happens.
-            if (apuluku2 < 33)
+            if (apuluku2 < 25)
                 Activities::BadActivity(member);
-            else if (apuluku2 < 66)
+            else if (apuluku2 < 60)
                 Activities::NeutralActivity(member);
             else
                 Activities::GoodActivity(member);
