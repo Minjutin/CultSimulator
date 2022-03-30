@@ -1,10 +1,10 @@
 #include <iostream>
 #include <list>
 #include <memory>
-#include <string>
 #include <time.h> 
 #include <limits>
 #include <conio.h>
+#include <string>
 
 #include "Person.h";
 #include "BasicData.h";
@@ -179,7 +179,23 @@ namespace Activities {
         }
     }
 
-
+    void DeathActivity(unique_ptr<Person>& member) {
+        int which = rand() % 3;
+        switch (which) {
+        case 0:
+            cout << member->GetName() + " thinks they can fly and jumps out of the roof. They are declared dead.";
+            BasicData::DeletePerson(member, memberList);
+            break;
+        case 1:
+            cout << member->GetName() + " disappeares mystically. "+cultName+" declares them dead.";
+            BasicData::DeletePerson(member, memberList);
+            break;
+        case 2:
+            cout << member->GetName() + " threatens to spread the cult secrets. Later, they are declared dead.";
+            BasicData::DeletePerson(member, memberList);
+            break;
+        }
+    }
 }
 
 namespace CreatingCult {
@@ -228,8 +244,8 @@ namespace CreatingCult {
 
     //TEST CULT
     void TestCult() {
-        cultName = "Erkin kultti";
-        godName = "Erkki";
+        cultName = "Petterin kultti";
+        godName = "Petteri";
         BasicData::AddPerson(memberList, "Jaska", 50, 0, "New member");
         BasicData::AddPerson(memberList, "Sari", 50, 0, "New member");
         BasicData::AddPerson(memberList, "Hilda", 50, 0, "New member");
@@ -299,6 +315,12 @@ namespace DayCycle {
 
         //go through every member and check what they do.
         for (auto& member : memberList) {
+
+            int kuolinluku = rand()%member->GetInsanity();
+            if (kuolinluku > 10) {
+                Activities::DeathActivity(member);
+                break;
+            }
 
             //Make apuluku based on faith.
             float apuluku1 = member->GetFaith() - 50;
