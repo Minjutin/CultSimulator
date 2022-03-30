@@ -52,13 +52,13 @@ namespace BasicMethods {
 
     //for getting member in list.
         string GetRandomName(list <unique_ptr<Person>>& lista) {
-        
         int luku1 = 0; 
         int luku2 = rand() % lista.size();
         for (auto& person : lista) {
             if (luku1 == luku2) {
                 return person->GetName();
             }
+            luku1++;
         }
     }
 }
@@ -88,7 +88,7 @@ namespace Activities {
         int which = rand() % 6;
         int apuluku = 0;
         string apustring = "";
-        
+
         //Check what is chosen.
         switch (which) {
         
@@ -129,6 +129,7 @@ namespace Activities {
         case 5:
             if (potentialList.empty()) {
                 GoodActivity(member);
+
             }
             else {
                 apustring = BasicMethods::GetRandomName(potentialList);
@@ -246,7 +247,7 @@ namespace CreatingCult {
     void TestCult() {
         cultName = "Petterin kultti";
         godName = "Petteri";
-        BasicData::AddPerson(memberList, "Jaska", 50, 0, "New member");
+        BasicData::AddPerson(memberList, "Jaska", 80, 0, "New member");
         BasicData::AddPerson(memberList, "Sari", 50, 0, "New member");
         BasicData::AddPerson(memberList, "Hilda", 50, 0, "New member");
         BasicData::AddPerson(memberList, "Elmeri", 50, 0, "New member");
@@ -316,7 +317,7 @@ namespace DayCycle {
         //go through every member and check what they do.
         for (auto& member : memberList) {
 
-            int kuolinluku = rand()%member->GetInsanity();
+            int kuolinluku = rand()%(member->GetInsanity()+1);
             if (kuolinluku > 10) {
                 Activities::DeathActivity(member);
                 break;
@@ -325,7 +326,6 @@ namespace DayCycle {
             //Make apuluku based on faith.
             float apuluku1 = member->GetFaith() - 50;
             float apuluku2 = rand() % 100 + apuluku1;
-
             //Check what kind of activity happens.
             if (apuluku2 < 25)
                 Activities::BadActivity(member);
