@@ -22,6 +22,38 @@ list <unique_ptr<Person>> memberList;
 list <unique_ptr<Person>> potentialList;
 list <unique_ptr<Person>> enemyList;
 
+namespace BasicMethods {
+
+    //Prints cult data.
+    void PrintCult() {
+        cout << "\n\nCult members:\n\n";
+        for (auto& member : memberList) {
+            cout << member->GetRole() + ": " + member->GetName() + ", faith " + to_string(member->GetFaith()) + ", insanity " + to_string(member->GetInsanity()) + ". \n";
+        }
+    }
+
+    //Change the screen
+    void GoNext() {
+        string empty = "";
+        cout << "\nPress ENTER to continue.\n";
+        cin.ignore(std::numeric_limits <std::streamsize> ::max(), '\n');
+        system("cls");
+        cout << "CULT SIMULATOR";
+    }
+
+    //for getting member in list.
+        string GetRandomName(list <unique_ptr<Person>>& lista) {
+        
+        int luku1 = 0; 
+        int luku2 = rand() % lista.size();
+        for (auto& person : lista) {
+            if (luku1 == luku2) {
+                return person->GetName();
+            }
+        }
+    }
+}
+
 //namespace for cult activities
 namespace Activities {
 
@@ -56,9 +88,11 @@ namespace Activities {
             apuluku = rand() % 3;
                 if (apuluku < 1) {
                     cout << "\n" << member->GetName() + " has found a potential member! Give them a name so we can add them to our subscriber-list: ";
+                    valueMethod(3, -1, member);
                     cin >> apustring;
                     BasicData::AddPerson(potentialList, apustring, 10, 0, "Potential member");
                     cout << endl;
+
                 }
                 else {
                     cout << member->GetName() + " is trying to find new followers.";
@@ -75,18 +109,26 @@ namespace Activities {
             break;
         case 3:
             cout << member->GetName() + " makes threatening calls to the previous cult members.";
-            valueMethod(1, 2, member);
+            valueMethod(2, 2, member);
             break;
         case 4:
             cout << member->GetName() + " writes a religious opinion to a cooking web site.";
             valueMethod(1, 1, member);
             break;
+
         //harassing potential members.
         case 5:
             if (potentialList.empty()) {
-
+                GoodActivity(member);
             }
+            else {
+                apustring = BasicMethods::GetRandomName(potentialList);
+                cout << member->GetName() + " is persuading " + apustring + " to join " + cultName;
+                valueMethod(2, 1, member);
+            }
+            break;
         }
+
 
     }
 
@@ -183,27 +225,6 @@ namespace CreatingCult {
         BasicData::AddPerson(memberList, "Viljami", 50, 0, "New member");
         BasicData::AddPerson(memberList, "Hulda", 50, 0, "New member");
         BasicData::AddPerson(memberList, "Masi", 50, 0, "Leader");
-    }
-
-}
-
-namespace BasicMethods {
-
-    //Prints cult data.
-    void PrintCult() {
-        cout << "\n\nCult members:\n\n";
-        for (auto& member : memberList) {
-            cout << member->GetRole() + ": " + member->GetName() + ", faith " + to_string(member->GetFaith()) + ", insanity " + to_string(member->GetInsanity()) + ". \n";
-        }
-    }
-
-    //Change the screen
-    void GoNext() {
-        string empty = "";
-        cout << "\nPress ENTER to continue.\n";
-        cin.ignore(std::numeric_limits <std::streamsize> ::max(), '\n');
-        system("cls");
-        cout << "CULT SIMULATOR";
     }
 
 }
