@@ -8,9 +8,9 @@ namespace BasicData {
 		lista.push_back(make_unique<Person>(name, faith, insanity, role));
 	}
 
-	void BasicData::DeletePerson(Person& person, list <unique_ptr<Person>>& lista) {
+	void BasicData::DeletePerson(unique_ptr<Person>& person, list <unique_ptr<Person>>& lista) {
 		for (auto& member : lista) {
-			if (member->GetName() == person.GetName())
+			if (member==person)
 			{
 				lista.remove(member);
 				break;
