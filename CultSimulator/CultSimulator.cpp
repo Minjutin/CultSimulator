@@ -12,7 +12,7 @@
 using namespace std;
 
 //variables
-int membercount;
+float membercount;
 int power;
 string cultName;
 string godName;
@@ -26,6 +26,9 @@ namespace BasicMethods {
 
     //Prints cult data.
     void PrintCult() {
+        membercount = membercount * (1+memberList.size()/10) / (1+enemyList.size()/10);
+        cout << "\n\nGlobal member count = " << membercount<<".";
+
         cout << "\n\nCult members:\n\n";
         for (auto& member : memberList) {
             cout << member->GetRole() + ": " + member->GetName() + ", faith " + to_string(member->GetFaith()) + ", insanity " + to_string(member->GetInsanity()) + ". \n";
@@ -36,6 +39,14 @@ namespace BasicMethods {
             cout << "\nPotential inviduals:\n\n";
             for (auto& potential : potentialList) {
                 cout << potential->GetName() + ", faith " + to_string(potential->GetFaith()) + ". \n";
+            }
+        }
+
+        //print enemies
+        if (!enemyList.empty()) {
+            cout << "\nPublic enemies:\n\n";
+            for (auto& enemy : enemyList) {
+                cout << enemy->GetName()+". \n";
             }
         }
 
@@ -97,7 +108,7 @@ namespace Activities {
             apuluku = rand() % 3;
                 if (apuluku < 1) {
                     cout << "\n" << member->GetName() + " has found a potential member! Give them a name so they can be added to the list:";
-                    valueMethod(4, -1, member);
+                    valueMethod(3, -1, member);
                     cin >> apustring;
                     BasicData::AddPerson(potentialList, apustring, 10, 0, "Potential");
                     cout << endl;
@@ -105,16 +116,16 @@ namespace Activities {
                 }
                 else {
                     cout << member->GetName() + " is trying to find new followers.";
-                    valueMethod(3, 0, member);
+                    valueMethod(1, 0, member);
                 }
             break;
         case 1:
             cout << member->GetName() + " prays for 8 hours.";
-            valueMethod(5, 2, member);
+            valueMethod(3, 2, member);
             break;
         case 2:
             cout << member->GetName() + " reads the cult scripture.";
-            valueMethod(2, 1, member);
+            valueMethod(1, 1, member);
             break;
         case 3:
             cout << member->GetName() + " makes threatening calls to the previous cult members.";
@@ -262,17 +273,17 @@ namespace DayCycle {
 
     void DayCycleCheckers() {
         //check if faith is more than 60.
-        cout << "\n\nRecap:\n";
+        cout << "\n\nRecap:\n\n";
         for (auto& member : memberList) {
             if (member->GetRole() == "New member" && member->GetFaith() > 59) {
-                cout << member->GetName() + " has been promoted to follower of "+godName+".\n";
+                cout << member->GetName() + " has been promoted to a follower of "+godName+".\n";
                 member->ChangeRole("Follower");
             }
         }
 
         //check if someone must be thrown out.
         for (auto& member : memberList) {
-            if (member->GetFaith() < 15) {
+            if (member->GetFaith() < 20) {
                 cout << member->GetName() + " has resign " + cultName + " and is now a public enemy.\n";
                 BasicData::AddPerson(enemyList, member->GetName(), member->GetFaith(), member->GetInsanity(), "Enemy");
                 memberList.remove(member);
@@ -327,9 +338,9 @@ namespace DayCycle {
             float apuluku1 = member->GetFaith() - 50;
             float apuluku2 = rand() % 100 + apuluku1;
             //Check what kind of activity happens.
-            if (apuluku2 < 25)
+            if (apuluku2 < 33)
                 Activities::BadActivity(member);
-            else if (apuluku2 < 60)
+            else if (apuluku2 < 63)
                 Activities::NeutralActivity(member);
             else
                 Activities::GoodActivity(member);
