@@ -12,6 +12,7 @@
 using namespace std;
 
 //variables
+int day;
 float membercount;
 int power;
 string cultName;
@@ -24,10 +25,24 @@ list <unique_ptr<Person>> enemyList;
 
 namespace BasicMethods {
 
+    //for getting member in list.
+    string GetRandomName(list <unique_ptr<Person>>& lista) {
+        int luku1 = 0;
+        int luku2 = rand() % lista.size();
+        for (auto& person : lista) {
+            if (luku1 == luku2) {
+                return person->GetName();
+            }
+            luku1++;
+        }
+    }
+
     //Prints cult data.
     void PrintCult() {
-        membercount = membercount * (1+memberList.size()/10) / (1+enemyList.size()/10);
-        cout << "\n\nGlobal member count = " << membercount<<".";
+        day++;
+
+        membercount = membercount * (1+memberList.size()/70.0) / (1+enemyList.size()/40.0);
+        cout << "\n\nGlobal member count: " << floor(membercount);
 
         cout << "\n\nCult members:\n\n";
         for (auto& member : memberList) {
@@ -61,15 +76,26 @@ namespace BasicMethods {
         cout << "CULT SIMULATOR";
     }
 
-    //for getting member in list.
-        string GetRandomName(list <unique_ptr<Person>>& lista) {
-        int luku1 = 0; 
-        int luku2 = rand() % lista.size();
-        for (auto& person : lista) {
-            if (luku1 == luku2) {
-                return person->GetName();
+    void EndCult() {
+        if (membercount > 500) {
+            int ending = rand() % 3;
+            cout << ending;
+            cout << "\n\nTHE END";
+            switch (ending) {
+            case 0:
+                cout << "\n\nAfter getting enough followers "+cultName+" managed to summon "+godName+".\nHowever, "+godName+" wasn't that happy about the early wake-up call and instead of giving anyone anything started eating people.";
+                break;
+            case 1:
+                cout << "\n\nBeing the number one suspicious cult in the world wasn't easy, especially after media found some tweets of the original leader.\nWho would've guessed that "+cultName+" was actually just a funny prank made by a lonely, socially awkward person?\n";
+                break;
+            case 2:
+                string kamu = BasicMethods::GetRandomName(memberList);
+                cout << "\n\nEverything went fine until " + kamu + " predicted the end of the world. Quickly, things turned out pretty chaotic.\nThe followers went on full rampage and the world around them were set on fire. Oh, if someone had told them that the only reason why "+kamu+" had made their prophet was to impress a girl...\n";
+                break;
             }
-            luku1++;
+        }
+        else {
+            cout << "\n\nLike many beautiful things in the world, after a while "+cultName+" and all of its followers just vanished.\nIt almost felt like they had never been there. Maybe they should have joined some other cult, like the cult of angry cleaning ladies.\n";
         }
     }
 }
@@ -105,7 +131,7 @@ namespace Activities {
         
         //follower finder.
         case 0:
-            apuluku = rand() % 3;
+            apuluku = rand() % 4;
                 if (apuluku < 1) {
                     cout << "\n" << member->GetName() + " has found a potential member! Give them a name so they can be added to the list:";
                     valueMethod(3, -1, member);
@@ -174,7 +200,8 @@ namespace Activities {
     }
 
     void BadActivity(unique_ptr<Person>& member) {
-        int which = rand() % 3;
+        int which = rand() % 4;
+        string apustring = "";
         switch (which) {
         case 0:
             cout << member->GetName() + " listens propaganda radio.";
@@ -188,6 +215,13 @@ namespace Activities {
             cout << member->GetName() + " attends to enemy cult meeting for recearch purpose.";
             valueMethod(-3, 0, member);
             break;
+        case 3:
+            apustring = BasicMethods::GetRandomName(memberList);
+            cout << member->GetName() + " is influecing " + apustring + " with their bad opinions. (faith -2 for both)\n";
+            for (auto& member2 : potentialList) {
+                if (member2->GetName() == apustring) { member2->AddFaith(-2); }
+            }
+            member->AddFaith(-2);
         }
     }
 
@@ -199,13 +233,14 @@ namespace Activities {
             BasicData::DeletePerson(member, memberList);
             break;
         case 1:
-            cout << member->GetName() + " disappeares mystically. "+cultName+" declares them dead.";
+            cout << member->GetName() + " disappeares mysteriously. "+cultName+" declares them dead.";
             BasicData::DeletePerson(member, memberList);
             break;
         case 2:
-            cout << member->GetName() + " threatens to spread the cult secrets. Later, they are declared dead.";
+            cout << member->GetName() + " threatens to spread the secrets of older cult members. Later, they are declared dead.";
             BasicData::DeletePerson(member, memberList);
             break;
+            //influence others
         }
     }
 }
@@ -215,7 +250,7 @@ namespace CreatingCult {
     //Creating cult.
     void CreateCult() {
         power = 0;
-        membercount = 0;
+        day = 0;
 
         cout << "\n\nWelcome to the Cult Simulator! Tell me the name of your cult:" << endl;
         cin >> cultName;
@@ -224,16 +259,17 @@ namespace CreatingCult {
 
         //how many members
         int howmany = 0;
-        cout << "\nTime to add some members. Tell me, how many members will there be (4-10):\n";
+        cout << "\nTime to add some members. Tell me, how many members will there be (4-6):\n";
 
         //check if user input is cool.
         while (true) {
             cin >> howmany;
-            if (howmany < 11 && howmany > 3) {
+            if (howmany < 7 && howmany > 3) {
                 break;
             }
-            cout << "Invalid input. How many members? (4-10)\n";
+            cout << "Invalid input. How many members? (4-6)\n";
         }
+        membercount = howmany;
 
         cout << "\nExcellent! Now you can add members by writing their names.\n";
 
@@ -242,14 +278,14 @@ namespace CreatingCult {
         string leaderName;
         cin >> leaderName;
 
-        BasicData::AddPerson(memberList, leaderName, 50, 0, "Leader");
+        BasicData::AddPerson(memberList, leaderName, 55, 0, "Leader");
 
         //add other members.
         for (int i = 1; i < howmany; i++) {
             string memberName = "";
             cout << "Add member:\n";
             cin >> memberName;
-            BasicData::AddPerson(memberList, memberName, 50, 0, "New member");
+            BasicData::AddPerson(memberList, memberName, 55, 0, "New member");
         }
         cout << "The cult is now created.\n";
     }
@@ -258,13 +294,12 @@ namespace CreatingCult {
     void TestCult() {
         cultName = "Petterin kultti";
         godName = "Petteri";
-        BasicData::AddPerson(memberList, "Jaska", 80, 0, "New member");
-        BasicData::AddPerson(memberList, "Sari", 50, 0, "New member");
-        BasicData::AddPerson(memberList, "Hilda", 50, 0, "New member");
-        BasicData::AddPerson(memberList, "Elmeri", 50, 0, "New member");
-        BasicData::AddPerson(memberList, "Viljami", 50, 0, "New member");
-        BasicData::AddPerson(memberList, "Hulda", 50, 0, "New member");
-        BasicData::AddPerson(memberList, "Masi", 50, 0, "Leader");
+        BasicData::AddPerson(memberList, "Jaska", 55, 0, "Leader");
+        BasicData::AddPerson(memberList, "Sari", 55, 0, "New member");
+        BasicData::AddPerson(memberList, "Hilda", 55, 0, "New member");
+        BasicData::AddPerson(memberList, "Elmeri", 55, 0, "New member");
+        membercount = memberList.size();
+        day = 0;
     }
 
 }
@@ -273,6 +308,10 @@ namespace DayCycle {
 
     void DayCycleCheckers() {
         //check if faith is more than 60.
+        if (membercount > 500) {
+            BasicMethods::EndCult();
+        }
+
         cout << "\n\nRecap:\n\n";
         for (auto& member : memberList) {
             if (member->GetRole() == "New member" && member->GetFaith() > 59) {
@@ -358,9 +397,11 @@ int main()
     BasicMethods::PrintCult();
     BasicMethods::GoNext();
 
+    membercount = 459;
     //Day Cycle
     while (true) {
         //Day cycle.
+        cout << "\n\nDay " << day;
         DayCycle::DayCycleCheckers();
         DayCycle::DayCycleActivities();
         BasicMethods::GoNext();
