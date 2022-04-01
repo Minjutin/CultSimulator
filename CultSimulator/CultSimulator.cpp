@@ -137,7 +137,7 @@ namespace Activities {
                 if (apuluku < 1) {
                     cout << "\n" << member->GetName() + " has found a potential member! Give them a name so they can be added to the list:";
                     valueMethod(3, -1, member);
-                    cin >> apustring;
+                    getline(cin, apustring);
                     BasicData::AddPerson(potentialList, apustring, 10, 0, "Potential");
                     cout << endl;
 
@@ -259,9 +259,9 @@ namespace CreatingCult {
         day = 0;
 
         cout << "\n\nWelcome to the Cult Simulator! Tell me the name of your cult:" << endl;
-        cin >> cultName;
+        getline(cin, cultName);
         cout << "\nNext, tell me the name of your god:\n";
-        cin >> godName;
+        getline(cin, godName);
 
         //how many members
         int howmany = 0;
@@ -282,7 +282,7 @@ namespace CreatingCult {
         //add leader.
         cout << "At first, choose your leader:\n";
         string leaderName;
-        cin >> leaderName;
+        getline(cin, leaderName);
 
         BasicData::AddPerson(memberList, leaderName, 55, 0, "Leader");
 
@@ -290,7 +290,7 @@ namespace CreatingCult {
         for (int i = 1; i < howmany; i++) {
             string memberName = "";
             cout << "Add member:\n";
-            cin >> memberName;
+            getline(cin, memberName);
             BasicData::AddPerson(memberList, memberName, 55, 0, "New member");
         }
         cout << "The cult is now created.\n";
