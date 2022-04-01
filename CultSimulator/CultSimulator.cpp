@@ -41,7 +41,7 @@ namespace BasicMethods {
     void PrintCult() {
         day++;
 
-        membercount = membercount * (1+memberList.size()/70.0) / (1+enemyList.size()/40.0);
+        membercount = membercount * (1+memberList.size()/20.0) / (1+enemyList.size()/10.0);
         cout << "\n\nGlobal member count: " << floor(membercount);
 
         cout << "\n\nCult members:\n\n";
@@ -98,6 +98,7 @@ namespace BasicMethods {
         else {
             cout << "\n\nLike many beautiful things in the world, after a while "+cultName+" and all of its followers just vanished.\nIt almost felt like they had never been there. Maybe they should have joined some other cult, like the cult of angry cleaning ladies.\n";
         }
+        exit(0);
     }
 }
 
@@ -133,11 +134,18 @@ namespace Activities {
         
         //follower finder.
         case 0:
-            apuluku = rand() % 4;
+            apuluku = rand() % 3;
                 if (apuluku < 1) {
                     cout << "\n" << member->GetName() + " has found a potential member! Give them a name so they can be added to the list:";
                     valueMethod(3, -1, member);
-                    getline(cin, apustring);
+                    while (true) {
+                        getline(cin, apustring);
+                        if (apustring != "") {
+                            break;
+                        }
+                        cout << "Give them a name:\n";
+                    }
+
                     BasicData::AddPerson(potentialList, apustring, 10, 0, "Potential");
                     cout << endl;
 
@@ -175,7 +183,7 @@ namespace Activities {
                 apustring = BasicMethods::GetRandomName(potentialList);
                 cout << member->GetName() + " is persuading " + apustring + " to join " + cultName+".";
                 for (auto& potential : potentialList) {
-                    if (potential->GetName() == apustring) { potential->AddFaith(10); }
+                    if (potential->GetName() == apustring) { if (potential->GetFaith() < 50) { potential->AddFaith(10); } }
                 }
                 valueMethod(2, 1, member);
             }
@@ -264,18 +272,18 @@ namespace CreatingCult {
         getline(cin, godName);
 
         //how many members
-        int howmany = 0;
+        string howmany = "";
         cout << "\nTime to add some members. Tell me, how many members will there be (4-6):\n";
 
         //check if user input is cool.
         while (true) {
-            cin >> howmany;
-            if (howmany < 7 && howmany > 3) {
+            getline(cin,howmany);
+            if (stoi(howmany) < 7 && stoi(howmany) > 3) {
                 break;
             }
             cout << "Invalid input. How many members? (4-6)\n";
         }
-        membercount = howmany;
+        membercount = stoi(howmany);
 
         cout << "\nExcellent! Now you can add members by writing their names.\n";
 
@@ -284,14 +292,14 @@ namespace CreatingCult {
         string leaderName;
         getline(cin, leaderName);
 
-        BasicData::AddPerson(memberList, leaderName, 55, 0, "Leader");
+        BasicData::AddPerson(memberList, leaderName, 50, 0, "Leader");
 
         //add other members.
-        for (int i = 1; i < howmany; i++) {
+        for (int i = 1; i < stoi(howmany); i++) {
             string memberName = "";
             cout << "Add member:\n";
             getline(cin, memberName);
-            BasicData::AddPerson(memberList, memberName, 55, 0, "New member");
+            BasicData::AddPerson(memberList, memberName, 50, 0, "New member");
         }
         cout << "The cult is now created.\n";
     }
@@ -315,7 +323,7 @@ namespace DayCycle {
     void DayCycleCheckers() {
         
         //check if membercount is high enough and game can be won.
-        if (membercount > 500) {
+        if (membercount > 100) {
             BasicMethods::EndCult();
         }
         
@@ -363,7 +371,7 @@ namespace DayCycle {
         for (auto& potential : potentialList) {
             if (potential->GetFaith() > 49) {
                 cout << potential->GetName() + " has joined "+ cultName +"!\n";
-                BasicData::AddPerson(memberList, potential->GetName(), potential->GetFaith(), 0, "New member");
+                BasicData::AddPerson(memberList, potential->GetName(), 50, 0, "New member");
                 BasicData::DeletePerson(potential, potentialList);
                 break;
             }
