@@ -76,6 +76,7 @@ namespace BasicMethods {
         cout << "CULT SIMULATOR";
     }
 
+    //Print the ending depending on why it happened.
     void EndCult() {
         if (membercount > 500) {
             int ending = rand() % 3;
@@ -103,7 +104,7 @@ namespace BasicMethods {
 //namespace for cult activities
 namespace Activities {
 
-    //method for activiting lists.
+    //method for changing faith and insanity and print it.
     void valueMethod(int faith, int insanity, unique_ptr<Person>& member) {
 
         //print faith and insanity changes.
@@ -121,6 +122,7 @@ namespace Activities {
         member->AddFaith(faith); member->AddInsanity(insanity);
     }
 
+    //Activities to rise faith and insanity.
     void GoodActivity(unique_ptr<Person>& member) {
         int which = rand() % 6;
         int apuluku = 0;
@@ -145,6 +147,7 @@ namespace Activities {
                     valueMethod(1, 0, member);
                 }
             break;
+
         case 1:
             cout << member->GetName() + " prays for 8 hours.";
             valueMethod(3, 2, member);
@@ -162,7 +165,7 @@ namespace Activities {
             valueMethod(2, 1, member);
             break;
 
-        //harassing potential members.
+        //harassing potential members to join the cult.
         case 5:
             if (potentialList.empty()) {
                 GoodActivity(member);
@@ -182,6 +185,7 @@ namespace Activities {
 
     }
 
+    //Activities that make a member lose insanity.
     void NeutralActivity(unique_ptr<Person>& member) {
         int which = rand() % 3;
         switch (which) {
@@ -198,7 +202,8 @@ namespace Activities {
             break;
         }
     }
-
+    
+    //Activities that make a member lose faith.
     void BadActivity(unique_ptr<Person>& member) {
         int which = rand() % 4;
         string apustring = "";
@@ -224,24 +229,25 @@ namespace Activities {
             member->AddFaith(-2);
         }
     }
-
+    
+    //Check why the member has died and delete them.
     void DeathActivity(unique_ptr<Person>& member) {
         int which = rand() % 3;
         switch (which) {
         case 0:
             cout << member->GetName() + " thinks they can fly and jumps out of the roof. They are declared dead.";
-            BasicData::DeletePerson(member, memberList);
             break;
         case 1:
             cout << member->GetName() + " disappeares mysteriously. "+cultName+" declares them dead.";
-            BasicData::DeletePerson(member, memberList);
             break;
         case 2:
             cout << member->GetName() + " threatens to spread the secrets of older cult members. Later, they are declared dead.";
-            BasicData::DeletePerson(member, memberList);
             break;
-            //influence others
         }
+
+        //HERE we should add insanity for everyone maybe.
+
+        BasicData::DeletePerson(member, memberList);
     }
 }
 
@@ -307,12 +313,15 @@ namespace CreatingCult {
 namespace DayCycle {
 
     void DayCycleCheckers() {
-        //check if faith is more than 60.
+        
+        //check if membercount is high enough and game can be won.
         if (membercount > 500) {
             BasicMethods::EndCult();
         }
-
+        
         cout << "\n\nRecap:\n\n";
+        
+        //check if faith is more than 60 and make them a follower.
         for (auto& member : memberList) {
             if (member->GetRole() == "New member" && member->GetFaith() > 59) {
                 cout << member->GetName() + " has been promoted to a follower of "+godName+".\n";
@@ -350,7 +359,7 @@ namespace DayCycle {
             }
         }
 
-        //Check if there is a potential member with faith 50.
+        //Check if there is a potential member with faith 50 and make them a member.
         for (auto& potential : potentialList) {
             if (potential->GetFaith() > 49) {
                 cout << potential->GetName() + " has joined "+ cultName +"!\n";
@@ -367,6 +376,7 @@ namespace DayCycle {
         //go through every member and check what they do.
         for (auto& member : memberList) {
 
+            //Check if member diesss.
             int kuolinluku = rand()%(member->GetInsanity()+1);
             if (kuolinluku > 10) {
                 Activities::DeathActivity(member);
@@ -376,6 +386,7 @@ namespace DayCycle {
             //Make apuluku based on faith.
             float apuluku1 = member->GetFaith() - 50;
             float apuluku2 = rand() % 100 + apuluku1;
+
             //Check what kind of activity happens.
             if (apuluku2 < 33)
                 Activities::BadActivity(member);
@@ -391,13 +402,18 @@ namespace DayCycle {
 int main()
 {
     cout << "CULT SIMULATOR";
-    //CreatingCult::CreateCult();
-    //BasicMethods::GoNext();
-    CreatingCult::TestCult(); 
+
+    //Create a cult
+    CreatingCult::CreateCult();
+    BasicMethods::GoNext();
+    
+    //Test cult for testing only
+    //CreatingCult::TestCult(); 
+    
+    //pre-printing.
     BasicMethods::PrintCult();
     BasicMethods::GoNext();
 
-    membercount = 459;
     //Day Cycle
     while (true) {
         //Day cycle.
