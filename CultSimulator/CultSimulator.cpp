@@ -41,7 +41,7 @@ namespace BasicMethods {
     void PrintCult() {
         day++;
 
-        membercount = membercount * (1+memberList.size()/20.0) / (1+enemyList.size()/10.0);
+        membercount = membercount * (1+memberList.size()/30.0) / (1+enemyList.size()/20.0);
         cout << "\n\nGlobal member count: " << floor(membercount);
 
         cout << "\n\nCult members:\n\n";
@@ -78,7 +78,7 @@ namespace BasicMethods {
 
     //Print the ending depending on why it happened.
     void EndCult() {
-        if (membercount > 500) {
+        if (membercount > 5000) {
             int ending = rand() % 3;
             cout << ending;
             cout << "\n\nTHE END";
@@ -91,7 +91,7 @@ namespace BasicMethods {
                 break;
             case 2:
                 string kamu = BasicMethods::GetRandomName(memberList);
-                cout << "\n\nEverything went fine until " + kamu + " predicted the end of the world. Quickly, things turned out pretty chaotic.\nThe followers went on full rampage and the world around them were set on fire. Oh, if someone had told them that the only reason why "+kamu+" had made their prophet was to impress a girl...\n";
+                cout << "\n\nEverything went fine until " + kamu + " predicted the end of the world. Quickly, things turned out pretty chaotic.\nThe followers went on full rampage and the world around them was set on fire. Oh, if someone had told them that the only reason why "+kamu+" had made their prophet was to impress a girl...\n";
                 break;
             }
         }
@@ -134,7 +134,7 @@ namespace Activities {
         
         //follower finder.
         case 0:
-            apuluku = rand() % 3;
+            apuluku = rand() % 4;
                 if (apuluku < 1) {
                     cout << "\n" << member->GetName() + " has found a potential member! Give them a name so they can be added to the list:";
                     valueMethod(3, -1, member);
@@ -230,11 +230,11 @@ namespace Activities {
             break;
         case 3:
             apustring = BasicMethods::GetRandomName(memberList);
-            cout << member->GetName() + " is influecing " + apustring + " with their bad opinions. (faith -2 for both)\n";
+            cout << member->GetName() + " is influecing " + apustring + " with their bad opinions. (faith -3 for both)\n";
             for (auto& member2 : potentialList) {
-                if (member2->GetName() == apustring) { member2->AddFaith(-2); }
+                if (member2->GetName() == apustring) { member2->AddFaith(-3); }
             }
-            member->AddFaith(-2);
+            member->AddFaith(-3);
         }
     }
     
@@ -256,6 +256,18 @@ namespace Activities {
         //HERE we should add insanity for everyone maybe.
 
         BasicData::DeletePerson(member, memberList);
+    }
+
+    void EnemyActivity(unique_ptr<Person>& enemy) {
+        int which = rand() % 2;
+        switch (which) {
+            case 1: 
+                string name = BasicMethods::GetRandomName(memberList);
+                cout << "Public enemy "+ enemy->GetName() + " is influecing " + name + " secretly with their opinions. (faith -3 for " + name + ")\n";
+                for (auto& member2 : potentialList) {
+                    if (member2->GetName() == name) { member2->AddFaith(-3); }
+                }
+        }
     }
 }
 
@@ -323,7 +335,7 @@ namespace DayCycle {
     void DayCycleCheckers() {
         
         //check if membercount is high enough and game can be won.
-        if (membercount > 100) {
+        if (membercount > 5000) {
             BasicMethods::EndCult();
         }
         
@@ -339,7 +351,7 @@ namespace DayCycle {
 
         //check if someone must be thrown out.
         for (auto& member : memberList) {
-            if (member->GetFaith() < 20) {
+            if (member->GetFaith() < 30) {
                 cout << member->GetName() + " has resign " + cultName + " and is now a public enemy.\n";
                 BasicData::AddPerson(enemyList, member->GetName(), member->GetFaith(), member->GetInsanity(), "Enemy");
                 memberList.remove(member);
@@ -404,6 +416,23 @@ namespace DayCycle {
                 Activities::GoodActivity(member);
         }
     }
+
+    void DailyEnemy() {
+        if (!enemyList.empty()) {
+            cout << "\nEnemy activities:";
+            for (auto& enemy : enemyList) {
+
+                //Check if enemy does anything.
+                int tehda = rand() % 2;
+
+                //Then print enemy activity.
+                if (tehda < 1) {
+                    Activities::EnemyActivity(enemy);
+                }
+            }
+        }
+    }
+
 
 }
 
