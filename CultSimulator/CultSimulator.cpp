@@ -23,6 +23,7 @@ list <unique_ptr<Person>> memberList;
 list <unique_ptr<Person>> potentialList;
 list <unique_ptr<Person>> enemyList;
 
+//Namespace for basic methods / methods without other namespace.
 namespace BasicMethods {
 
     //for getting member in list.
@@ -36,12 +37,25 @@ namespace BasicMethods {
             luku1++;
         }
     }
+    void EndCult();
 
     //Prints cult data.
     void PrintCult() {
         day++;
 
-        membercount = membercount * (1+memberList.size()/30.0) / (1+enemyList.size()/20.0);
+        //check if there is no more cult members and end the game.
+        if (memberList.empty()) {
+            system("cls");
+            BasicMethods::EndCult();
+        }
+
+        //check if membercount is high enough and game can be won.
+        if (membercount > 3000) {
+            BasicMethods::EndCult();
+        }
+
+        //edit global membercount
+        membercount = membercount * (1+memberList.size()/25.0) / (1+enemyList.size()/20.0);
         cout << "\n\nGlobal member count: " << floor(membercount);
 
         cout << "\n\nCult members:\n\n";
@@ -78,13 +92,13 @@ namespace BasicMethods {
 
     //Print the ending depending on why it happened.
     void EndCult() {
-        if (membercount > 5000) {
+        cout << "THE END";
+        if (membercount > 3000) {
             int ending = rand() % 3;
             cout << ending;
-            cout << "\n\nTHE END";
             switch (ending) {
             case 0:
-                cout << "\n\nAfter getting enough followers "+cultName+" managed to summon "+godName+".\nHowever, "+godName+" wasn't that happy about the early wake-up call and instead of giving anyone anything started eating people.";
+                cout << "\n\nAfter getting enough followers "+cultName+" managed to summon "+godName+".\nHowever, "+godName+" wasn't that happy about the early wake-up call and instead of giving anyone anything started eating people.\n";
                 break;
             case 1:
                 cout << "\n\nBeing the number one suspicious cult in the world wasn't easy, especially after media found some tweets of the original leader.\nWho would've guessed that "+cultName+" was actually just a funny prank made by a lonely, socially awkward person?\n";
@@ -95,14 +109,18 @@ namespace BasicMethods {
                 break;
             }
         }
-        else {
-            cout << "\n\nLike many beautiful things in the world, after a while "+cultName+" and all of its followers just vanished.\nIt almost felt like they had never been there. Maybe they should have joined some other cult, like the cult of angry cleaning ladies.\n";
+        else if (membercount > 500) {
+            cout << "\n\nAlthough " + cultName + " never managed to reach its goals before being shutted down, after hundreds of years a new moment was born from the old writings. They call themselves THE NEW "+ cultName+".\n";
+        }
+
+        else{
+            cout << "\n\nLike many beautiful things in the world, after a while "+cultName+" and all of its followers just vanished.\nIt almost felt like they had never been there. Maybe they should have joined some other cult...\n";
         }
         exit(0);
     }
 }
 
-//namespace for cult activities
+//Namespace for cult activities.
 namespace Activities {
 
     //method for changing faith and insanity and print it.
@@ -199,10 +217,11 @@ namespace Activities {
         switch (which) {
         case 0:
             cout << member->GetName() + " has a coffee break.";
-            valueMethod(0, -1, member);
+            valueMethod(0, -2, member);
             break;
         case 1:
-            cout << member->GetName() + " is doing nothing.\n";
+            cout << member->GetName() + " is doing nothing.";
+            valueMethod(0, -1, member);
             break;
         case 2:
             cout << member->GetName() + " uses psychiatrist.";
@@ -230,27 +249,29 @@ namespace Activities {
             break;
         case 3:
             apustring = BasicMethods::GetRandomName(memberList);
-            cout << member->GetName() + " is influecing " + apustring + " with their bad opinions. (faith -3 for both)\n";
+            cout << member->GetName() + " is influencing " + apustring + " with their bad opinions. (faith -2 for both)\n";
             for (auto& member2 : potentialList) {
-                if (member2->GetName() == apustring) { member2->AddFaith(-3); }
+                if (member2->GetName() == apustring) { member2->AddFaith(-2); }
             }
-            member->AddFaith(-3);
+            member->AddFaith(-2);
         }
     }
     
     //Check why the member has died and delete them.
     void DeathActivity(unique_ptr<Person>& member) {
-        int which = rand() % 3;
+        int which = rand() % 4;
         switch (which) {
         case 0:
-            cout << member->GetName() + " thinks they can fly and jumps out of the roof. They are declared dead.";
+            cout << member->GetName() + " thinks they can fly and jumps out of the roof. They are declared dead.\n";
             break;
         case 1:
-            cout << member->GetName() + " disappeares mysteriously. "+cultName+" declares them dead.";
+            cout << member->GetName() + " disappeares mysteriously. "+cultName+" declares them dead.\n";
             break;
         case 2:
-            cout << member->GetName() + " threatens to spread the secrets of older cult members. Later, they are declared dead.";
+            cout << member->GetName() + " threatens to spread the secrets of older cult members. Later, they are declared dead.\n";
             break;
+        case 3:
+            cout << member->GetName() + " volunteered to be sacrificed for " + godName + ". They are declared dead.\n";
         }
 
         //HERE we should add insanity for everyone maybe.
@@ -271,6 +292,7 @@ namespace Activities {
     }
 }
 
+//Namespace for cult creating methods.
 namespace CreatingCult {
     
     //Creating cult.
@@ -330,15 +352,12 @@ namespace CreatingCult {
 
 }
 
+//Namespace for day cycle methods.
 namespace DayCycle {
 
+    //Different things that may happen at the start of the day, such as follower becoming enemy etc.
     void DayCycleCheckers() {
-        
-        //check if membercount is high enough and game can be won.
-        if (membercount > 5000) {
-            BasicMethods::EndCult();
-        }
-        
+
         cout << "\n\nRecap:\n\n";
         
         //check if faith is more than 60 and make them a follower.
@@ -351,7 +370,7 @@ namespace DayCycle {
 
         //check if someone must be thrown out.
         for (auto& member : memberList) {
-            if (member->GetFaith() < 30) {
+            if (member->GetFaith() < 40) {
                 cout << member->GetName() + " has resign " + cultName + " and is now a public enemy.\n";
                 BasicData::AddPerson(enemyList, member->GetName(), member->GetFaith(), member->GetInsanity(), "Enemy");
                 memberList.remove(member);
@@ -367,8 +386,8 @@ namespace DayCycle {
                 break;
             }
         }
-        //if there is no leader, get random member with Honorary member - role and make them a leader.
-        //EDIT now it only takes the first member.
+
+        //if there is no leader, get the first member with Honorary member - role and make them a leader.
         if (noLeader) {
             for (auto& member : memberList) {
                 if (member->GetRole() == "Follower") {
@@ -390,6 +409,7 @@ namespace DayCycle {
         }
     }
 
+    //Check what every member does during the day.
     void DayCycleActivities() {
         cout << "\nDaily Activities:\n\n";
 
@@ -417,9 +437,10 @@ namespace DayCycle {
         }
     }
 
+    //Check what every enemy does during the day.
     void DailyEnemy() {
         if (!enemyList.empty()) {
-            cout << "\nEnemy activities:";
+            cout << "\nEnemy activities:\n\n";
             for (auto& enemy : enemyList) {
 
                 //Check if enemy does anything.
@@ -436,10 +457,11 @@ namespace DayCycle {
 
 }
 
+//THE GAME ITSELF.
 int main()
 {
     cout << "CULT SIMULATOR";
-
+    std::srand(std::time(0));
     //Create a cult
     CreatingCult::CreateCult();
     BasicMethods::GoNext();
@@ -457,6 +479,7 @@ int main()
         cout << "\n\nDay " << day;
         DayCycle::DayCycleCheckers();
         DayCycle::DayCycleActivities();
+        DayCycle::DailyEnemy();
         BasicMethods::GoNext();
 
         //Cult information.
@@ -465,10 +488,3 @@ int main()
     }
 
 }
-
-//These checks if anything must be changed inside the cult.
-
-
-
-
-
